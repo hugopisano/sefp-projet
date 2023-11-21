@@ -67,7 +67,7 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className="col p-0 m-0">
-                    <div className='d-flex flex-col h-24 shadow-md justify-center items-start pl-8 mb-2'>
+                    <div className='d-flex flex-col h-24 shadow-md justify-center items-start pl-8'>
                         <h4>Tableau de bord</h4>
                         <p className='text-[#64748B]'>Informations détaillées sur votre entreprise</p>
                     </div>

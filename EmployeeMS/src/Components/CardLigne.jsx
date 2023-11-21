@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import Modal from './Modal';
 import axios from 'axios';
+import ModalAsignPallets from './ModalAsignPallets';
 
 const CardLigne = ({ title, post, value }) => {
     const [isModalOpen, setModalOpen] = useState(false);
+    const [isModalPallets, setIsModalPallets] = useState(false);
 
     const handleOpenModal = () => {
         setModalOpen(true);
     };
+
+    const handleOpenPallets = () => {
+        setIsModalPallets(true)
+    }
+
     return (
         <div className="p-4 d-flex w-2/4 h-2/6 justify-center">
             <div className="flex rounded-lg p-4 flex-col bg-white shadow-sm">
@@ -27,9 +34,10 @@ const CardLigne = ({ title, post, value }) => {
                     <div className="d-flex gap-8">
                         <a href="#" onClick={handleOpenModal} className="bg-[#E2E8F0] hover:bg-[#c7ccd3] text-black font-semibold rounded-2xl py-3 px-4 w-full no-underline text-center">Modifier
                         </a>
-                        <a href="#" className="bg-[#F6941C] hover:bg-[#e79839] text-white font-semibold rounded-2xl py-3 px-4 w-full no-underline text-center">Ajouter
+                        <a href="#" onClick={handleOpenPallets} className="bg-[#F6941C] hover:bg-[#e79839] text-white font-semibold rounded-2xl py-3 px-4 w-full no-underline text-center">Ajouter
                         </a>
                     </div>
+                    {isModalPallets && <ModalAsignPallets title={title} post={post} value={value} openModal={() => setIsModalPallets(true)} closeModal={() => setIsModalPallets(false)} />}
                     {isModalOpen && <Modal title={title} post={post} value={value} openModal={() => setModalOpen(true)} closeModal={() => setModalOpen(false)} />}
                 </div>
             </div>

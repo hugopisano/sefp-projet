@@ -128,10 +128,83 @@ router.get('/post_status/:postId', (req, res) => {
     });
 });
 
+router.get('/employees_by_post/:postId', (req, res) => {
+    const postId = req.params.postId;
+
+    const sql = `
+        SELECT e.* 
+        FROM employee e
+        INNER JOIN assignments a ON e.id = a.employee_id
+        WHERE a.post_id = ?;
+    `;
+
+    con.query(sql, [postId], (err, result) => {
+        if (err) {
+            console.log("Error:", err);
+            return res.json({ Status: false, Error: "Query error" });
+        } else {
+            return res.json({ Status: true, Employees: result });
+        }
+    });
+});
+
+router.post('/record_pallet', (req, res) => {
+    // Remplacez ces champs par les noms réels des champs de votre formulaire
+    const { employeeId, length, width, woodType, additionalOptions } = req.body;
+
+    // Assurez-vous que les champs nécessaires sont présents
+    if (!employeeId || !length || !width || !woodType) {
+        return res.status(400).json({ Status: false, Error: "Missing required fields" });
+    }
+
+    const sql = `
+        INSERT INTO pallets (employee_id, length, width, wood_type, additional_options)
+        VALUES (?, ?, ?, ?, ?)
+    `;
+    const values = [employeeId, length, width, woodType, additionalOptions];
+
+    con.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Database query error" });
+        }
+        return res.json({ Status: true, Result: "Pallet recorded successfully" });
+    });
+});
+
 router.get('/logout', (req, res) => {
     res.clearCookie('token')
     return res.json({ Status: true })
 })
+
+router.get('/daily_production', (req, res) => {
+    // Remplacez ceci par votre requête SQL appropriée
+    const sql = `
+        SELECT 
+        e.nom, 
+        e.prenom, 
+        MAX(p.date_assigned) as lastAssignedDate, 
+        COUNT(*) as totalProduced
+    FROM 
+        pallets p
+        JOIN employee e ON p.employee_id = e.id
+    WHERE 
+        DATE(p.date_assigned) = CURDATE()
+    GROUP BY 
+        e.id, e.nom, e.prenom
+    ORDER BY 
+        totalProduced DESC;
+    `;
+
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Database query error" });
+        }
+        return res.json({ Status: true, Data: results });
+    });
+});
+
 
 
 export { router as adminRouter }

@@ -4,11 +4,21 @@ import React, { useEffect, useState } from 'react';
 const Modal = ({ title, post, value, openModal, closeModal }) => {
     const [data, setData] = useState([]);
     const [postFull, setPostFull] = useState(false)
+    const [asignEmployee, setAsignEmployee] = useState([]);
 
     useEffect(() => {
+        axios.get(`http://localhost:3000/auth/employees_by_post/${post}`)
+            .then(response => {
+                if (response.data.Status) {
+                    setAsignEmployee(response.data.Employees)
+                } else {
+                    alert(`Erreur lors de l'importation des employés assignés au poste ${post}`)
+                }
+            })
+            .catch(err => console.log(err));
+
         axios.get(`http://localhost:3000/auth/post_status/${post}`)
             .then(response => {
-                console.log('test', response.data.PostFull)
                 if (response.data.PostFull) {
                     setPostFull(true)
                 } else {
@@ -79,6 +89,20 @@ const Modal = ({ title, post, value, openModal, closeModal }) => {
                                 </select>
                             )
                         }
+                    </div>
+                    <div className="mb-4">
+                        <h4 className="text-lg font-medium text-gray-900">Employés assignés au poste :</h4>
+                        <ul className="list-disc">
+                            {asignEmployee.length > 0 ? (
+                                asignEmployee.map((employee) => (
+                                    <li key={employee.id}>
+                                        {employee.prenom} {employee.nom}
+                                    </li>
+                                ))
+                            ) : (
+                                <p>Aucun employé assigné à ce poste.</p>
+                            )}
+                        </ul>
                     </div>
                     {/* Autres champs de formulaire... */}
                 </form>
