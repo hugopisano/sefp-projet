@@ -205,6 +205,203 @@ router.get('/daily_production', (req, res) => {
     });
 });
 
+router.get('/total_pallets_today', async (req, res) => {
+    const sql = `SELECT COUNT(*) AS totalProducedToday FROM pallets WHERE DATE(date_assigned) = CURDATE()`;
+
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Database query error" });
+        }
+        return res.json({ Status: true, Data: results });
+    });
+});
+
+router.get('/stats/pallets/daily', (req, res) => {
+    const sql = `
+    SELECT DATE_FORMAT(date_assigned, '%Y-%m-%d') AS date, COUNT(*) AS total_pallets
+    FROM pallets
+    WHERE date_assigned >= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) - 0 DAY)
+        AND date_assigned < CURDATE() + INTERVAL 1 DAY
+        AND WEEKDAY(date_assigned) BETWEEN 0 AND 4
+    GROUP BY date
+    ORDER BY date;  
+  `;
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Database query error" });
+        }
+        res.json({ Status: true, Data: results });
+    });
+});
+
+router.get('/stats/pallets/week', (req, res) => {
+
+    const sql = `SELECT DATE_FORMAT(date_assigned, '%Y-%m-%d') AS date, COUNT(*) AS total_pallets
+                FROM pallets
+                WHERE YEARWEEK(date_assigned, 1) = YEARWEEK(CURDATE(), 1)
+                AND DAYOFWEEK(date_assigned) BETWEEN 2 AND 6
+                GROUP BY date
+                ORDER BY date;
+                `;
+
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Database query error" });
+        }
+        res.json({ Status: true, Data: results });
+    });
+});
+
+router.get('/stats/pallets/month', (req, res) => {
+
+    const sql = `SELECT DATE_FORMAT(date_assigned, '%Y-%m-%d') AS date, COUNT(*) AS total_pallets
+                   FROM pallets
+                   WHERE YEAR(date_assigned) = YEAR(CURDATE()) AND MONTH(date_assigned) = MONTH(CURDATE())
+                   GROUP BY date
+                   ORDER BY date;`;
+
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Database query error" });
+        }
+        res.json({ Status: true, Data: results });
+    });
+});
+
+router.get('/stats/pallets/year', (req, res) => {
+
+    const sql = `SELECT DATE_FORMAT(date_assigned, '%Y') AS year, COUNT(*) AS total_pallets
+    FROM pallets
+    GROUP BY year
+    ORDER BY year;`;
+
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Database query error" });
+        }
+        res.json({ Status: true, Data: results });
+    });
+});
+
+// router.get('/daily_pallets_for_employee_of_the_month/:year/:month', (req, res) => {
+//     const year = req.params.year;
+//     const month = req.params.month;
+
+//     const employeeQuery = `
+//         SELECT e.id, e.nom, e.prenom
+//         FROM employee e
+//         JOIN pallets p ON e.id = p.employee_id
+//         WHERE YEAR(p.date_assigned) = ? AND MONTH(p.date_assigned) = ?
+//         GROUP BY e.id
+//         ORDER BY COUNT(*) DESC
+//         LIMIT 1;
+//     `;
+
+//     const sql = `
+//             SELECT 
+//             DATE_FORMAT(p.date_assigned, '%Y-%m-%d') AS date,
+//             COUNT(*) AS total_pallets
+//         FROM 
+//             pallets p
+//         WHERE 
+//             YEAR(p.date_assigned) = ? AND MONTH(p.date_assigned) = ?
+//             AND p.employee_id = (
+//                 SELECT employee_id
+//                 FROM pallets
+//                 WHERE YEAR(date_assigned) = ? AND MONTH(date_assigned) = ?
+//                 GROUP BY employee_id
+//                 ORDER BY COUNT(*) DESC
+//                 LIMIT 1
+//             )
+//         GROUP BY 
+//             DATE_FORMAT(p.date_assigned, '%Y-%m-%d')
+//         ORDER BY 
+//             DATE_FORMAT(p.date_assigned, '%Y-%m-%d');
+//     `;
+
+//     con.query(sql, [year, month, year, month], (err, results) => {
+//         if (err) {
+//             console.error("Error:", err);
+//             return res.status(500).json({ Status: false, Error: "Database query error" });
+//         }
+//         res.json({ Status: true, DailyPallets: results });
+//     });
+// });
+
+router.get('/employee_of_the_month_data/:year/:month', async (req, res) => {
+    const year = req.params.year;
+    const month = req.params.month;
+
+    // Trouver l'employé du mois
+    const employeeQuery = `
+        SELECT e.id, e.nom, e.prenom
+        FROM employee e
+        JOIN pallets p ON e.id = p.employee_id
+        WHERE YEAR(p.date_assigned) = ? AND MONTH(p.date_assigned) = ?
+        GROUP BY e.id
+        ORDER BY COUNT(*) DESC
+        LIMIT 1;
+    `;
+
+    let employeeOfTheMonth;
+    try {
+        const employeeResult = await queryPromise(con, employeeQuery, [year, month]);
+        if (employeeResult.length === 0) {
+            return res.status(404).json({ Status: false, Error: "No employee found for the specified month" });
+        }
+        employeeOfTheMonth = employeeResult[0];
+    } catch (err) {
+        console.error("Error:", err);
+        return res.status(500).json({ Status: false, Error: "Database query error", Details: err.message });
+    }
+
+    // Obtenir les données de production quotidienne
+    const productionQuery = `
+    SELECT 
+        DATE_FORMAT(p.date_assigned, '%Y-%m-%d') AS date,
+        COUNT(*) AS total_pallets
+    FROM 
+        pallets p
+    WHERE 
+        YEAR(p.date_assigned) = ? AND MONTH(p.date_assigned) = ?
+        AND p.employee_id = ?
+    GROUP BY 
+        DATE_FORMAT(p.date_assigned, '%Y-%m-%d')
+    ORDER BY 
+        DATE_FORMAT(p.date_assigned, '%Y-%m-%d');
+`;
+
+    try {
+        const productionData = await queryPromise(con, productionQuery, [year, month, employeeOfTheMonth.id]);
+        res.json({
+            Status: true,
+            EmployeeOfTheMonth: employeeOfTheMonth,
+            DailyPallets: productionData
+        });
+    } catch (err) {
+        console.error("Error:", err);
+        return res.status(500).json({ Status: false, Error: "Database query error", Details: err.message });
+    }
+});
+
+function queryPromise(con, query, params) {
+    return new Promise((resolve, reject) => {
+        con.query(query, params, (err, results) => {
+            if (err) reject(err);
+            else resolve(results);
+        });
+    });
+}
+
+
+
+
+
 
 
 export { router as adminRouter }
