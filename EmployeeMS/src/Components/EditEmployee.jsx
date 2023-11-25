@@ -43,26 +43,23 @@ const EditEmployee = () => {
     }
 
     return (
-        <div className='d-flex flex-column align-items-center pt-4'>
-            <h2>Edit Employee</h2>
+        <div className='d-flex flex-column align-items-center px-8 pt-4 h-3/4 justify-center'>
+            <h2>Mettre à jour les informations de l'employé</h2>
             <form className="row g-3 w-50" onSubmit={handleSubmit}>
                 <div className="col-12">
-                    <label htmlFor="nom" className="form-label">Name</label>
-                    <input type="text" className="form-control" id="nom" placeholder='Enter Nom' autoComplete='off'
+                    <input type="text" className='mt-4 w-full border border-gray-300 rounded-md py-3 px-3 focus:outline-none focus:border-blue-500' id="nom" placeholder='Enter Nom' autoComplete='off'
                         onChange={e => setData({ ...data, nom: e.target.value })} value={data.nom} />
                 </div>
                 <div className="col-12">
-                    <label htmlFor="prenom" className="form-label">Firstname</label>
-                    <input type="text" className="form-control" id="prenom" placeholder='Enter Prenom' autoComplete='off'
+                    <input type="text" className='my-2 w-full border border-gray-300 rounded-md py-3 px-3 focus:outline-none focus:border-blue-500' id="prenom" placeholder='Enter Prenom' autoComplete='off'
                         onChange={e => setData({ ...data, prenom: e.target.value })} value={data.prenom} />
                 </div>
                 <div className="col-12">
-                    <label htmlFor="immatriculation" className="form-label">Immatriculation</label>
-                    <input type="text" className="form-control" id="immatriculation" placeholder='Enter Immatriculation' autoComplete='off'
+                    <input type="text" className='mb-4 w-full border border-gray-300 rounded-md py-3 px-3 focus:outline-none focus:border-blue-500' id="immatriculation" placeholder='Enter Immatriculation' autoComplete='off'
                         onChange={e => setData({ ...data, immatriculation: e.target.value })} value={data.immatriculation} />
                 </div>
-                <div className="col-12">
-                    <button type="submit" className="btn btn-primary">Edit</button>
+                <div className="col-12 text-center">
+                    <button type="submit" className='text-white bg-[#F6941C] px-4 py-2 rounded-xl no-underline'>Mettre à jour</button>
                 </div>
             </form>
         </div>

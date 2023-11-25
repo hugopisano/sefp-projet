@@ -1,12 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from './Card';
 import DailyProduction from './dailyProduction';
+import axios from 'axios';
 
 const Home = () => {
+  const [totalProducedToday, setTotalProducedToday] = useState(0);
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/auth/total_pallets_today')
+      .then(response => {
+        if(response.data.Status) {
+          setTotalProducedToday(response.data.Data[0].totalProducedToday)
+        }
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des données', error);
+      });
+  }, []);
 
   return (
     <div className='bg-[#f9fafc]'>
-      <div className="d-flex space-x-6 py-6 px-8">
+      <div className="d-flex space-x-6 pt-6 px-8">
         <Card
           // icon={<YourIconComponent />}
           icon=
@@ -15,10 +29,10 @@ const Home = () => {
           </svg>
           }
           title="Total de palettes du jour"
-          value="180"
-          change="+12%"
+          value={totalProducedToday}
+          change=""
         />
-        <Card
+        {/* <Card
           icon=
           {
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,8 +40,8 @@ const Home = () => {
             </svg>
           }
           title="Durée Moyenne/Palette"
-          value="15min"
-          change="-5%"
+          value=""
+          change=""
         />
         <Card
           icon=
@@ -37,9 +51,9 @@ const Home = () => {
             </svg>
           }
           title="Efficacité Globale du jour"
-          value="90%"
-          change="+5%"
-        />
+          value=""
+          change=""
+        /> */}
         {/* Repeat for the other cards */}
       </div>
       <div className="d-flex space-x-6 py-6 px-8">

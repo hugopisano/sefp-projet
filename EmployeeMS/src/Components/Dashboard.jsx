@@ -19,9 +19,9 @@ const Dashboard = () => {
 
     return (
         <div className="container-fluid">
-            <div className="row flex-nowrap">
+            <div className="row flex-nowrap h-[100%] min-h-[100vh]">
                 <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-white shadow-md">
-                    <div className="d-flex pb-10 justify-between flex-column align-items-center align-items-sm-start px-6 pt-2 text-black min-vh-100">
+                    <div className="d-flex pb-10 justify-between flex-column align-items-center align-items-sm-start px-6 pt-2 text-black h-full">
                         <a href="/dashboard" className="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-black text-decoration-none">
                             {/* <span className="fs-5 fw-bolder d-none d-sm-inline">Admin Dashboard</span> */}
                             <img src={Img1} alt="Placeholder Image" className="object-cover w-full h-full" />
@@ -67,9 +67,11 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className="col p-0 m-0">
-                    <div className='d-flex flex-col h-24 shadow-md justify-center items-start pl-8'>
-                        <h4>Tableau de bord</h4>
-                        <p className='text-[#64748B]'>Informations détaillées sur votre entreprise</p>
+                    <div className='d-flex flex-row h-24 shadow-md px-8 justify-between items-center'>
+                        <div className="d-flex flex-col justify-center items-start">
+                            <h3 className='font-bold'>Tableau de bord</h3>
+                            <p className='text-[#64748B]'>Informations détaillées sur votre entreprise</p>
+                        </div>
                     </div>
                     <Outlet />
                 </div>
