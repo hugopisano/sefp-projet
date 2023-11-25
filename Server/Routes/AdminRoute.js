@@ -288,51 +288,6 @@ router.get('/stats/pallets/year', (req, res) => {
     });
 });
 
-// router.get('/daily_pallets_for_employee_of_the_month/:year/:month', (req, res) => {
-//     const year = req.params.year;
-//     const month = req.params.month;
-
-//     const employeeQuery = `
-//         SELECT e.id, e.nom, e.prenom
-//         FROM employee e
-//         JOIN pallets p ON e.id = p.employee_id
-//         WHERE YEAR(p.date_assigned) = ? AND MONTH(p.date_assigned) = ?
-//         GROUP BY e.id
-//         ORDER BY COUNT(*) DESC
-//         LIMIT 1;
-//     `;
-
-//     const sql = `
-//             SELECT 
-//             DATE_FORMAT(p.date_assigned, '%Y-%m-%d') AS date,
-//             COUNT(*) AS total_pallets
-//         FROM 
-//             pallets p
-//         WHERE 
-//             YEAR(p.date_assigned) = ? AND MONTH(p.date_assigned) = ?
-//             AND p.employee_id = (
-//                 SELECT employee_id
-//                 FROM pallets
-//                 WHERE YEAR(date_assigned) = ? AND MONTH(date_assigned) = ?
-//                 GROUP BY employee_id
-//                 ORDER BY COUNT(*) DESC
-//                 LIMIT 1
-//             )
-//         GROUP BY 
-//             DATE_FORMAT(p.date_assigned, '%Y-%m-%d')
-//         ORDER BY 
-//             DATE_FORMAT(p.date_assigned, '%Y-%m-%d');
-//     `;
-
-//     con.query(sql, [year, month, year, month], (err, results) => {
-//         if (err) {
-//             console.error("Error:", err);
-//             return res.status(500).json({ Status: false, Error: "Database query error" });
-//         }
-//         res.json({ Status: true, DailyPallets: results });
-//     });
-// });
-
 router.get('/employee_of_the_month_data/:year/:month', async (req, res) => {
     const year = req.params.year;
     const month = req.params.month;
