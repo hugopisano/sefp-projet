@@ -96,30 +96,6 @@ const DailyProduction = () => {
                             ))}
                         </tbody>
                     </table>
-                    {/* <nav className="flex justify-between pt-4 items-baseline h-16">
-                        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            Affichage 1-10 of 50
-                        </span>
-                        <ul className="inline-flex items-center -space-x-px no-underline mb-0">
-                            <li>
-                                <a href="#" className="px-3 py-2 border border-gray-300 text-gray-500 rounded-l-lg hover:bg-gray-100 dark:text-gray-400 no-underline">
-                                    Précédent
-                                </a>
-                            </li>
-                            {[1, 2, 3, 4, 5].map(page => (
-                                <li key={page}>
-                                    <a href="#" className={`px-3 py-2 border border-gray-300 text-gray-500 hover:bg-gray-100 dark:text-gray-400 no-underline ${page === 3 ? 'bg-blue-500 hover:bg-blue-900 text-white' : ''}`}>
-                                        {page}
-                                    </a>
-                                </li>
-                            ))}
-                            <li>
-                                <a href="#" className="px-3 py-2 border border-gray-300 text-gray-500 rounded-r-lg hover:bg-gray-100 dark:text-gray-400 no-underline">
-                                    Suivant
-                                </a>
-                            </li>
-                        </ul>
-                    </nav> */}
                 </div>
             </div>
             <div className="flex flex-col w-1/4 gap-3">

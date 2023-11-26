@@ -23,7 +23,6 @@ const Dashboard = () => {
                 <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-white shadow-md">
                     <div className="d-flex pb-10 justify-between flex-column align-items-center align-items-sm-start px-6 pt-2 text-black h-full">
                         <a href="/dashboard" className="d-flex align-items-center pb-3 mb-md-1 mt-md-3 me-md-auto text-black text-decoration-none">
-                            {/* <span className="fs-5 fw-bolder d-none d-sm-inline">Admin Dashboard</span> */}
                             <img src={Img1} alt="Placeholder Image" className="object-cover w-full h-full" />
                         </a>
                         <ul className="nav mt-14 nav-pills flex-column mb-sm-auto text-left mb-24 align-items-center align-items-sm-start w-full content-center" id="menu">
@@ -58,11 +57,6 @@ const Dashboard = () => {
                                     <i className="fs-4 bi-power"></i> <span className="ms-1 d-none d-sm-inline">Déconnexion</span>
                                 </Link>
                             </li>
-                            {/* <li onClick={handleLogout}>
-                                <a href="#" className="nav-link px-0 align-middle text-black w-full h-full">
-                                    <i className="fs-4 bi-power"></i> <span className="ms-1 d-none d-sm-inline">Déconnexion</span>
-                                </a>
-                            </li> */}
                         </ul>
                     </div>
                 </div>

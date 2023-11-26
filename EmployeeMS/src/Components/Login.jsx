@@ -2,18 +2,6 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import '../index.css';
 import { useNavigate } from 'react-router-dom';
-import {
-    Button,
-    Checkbox,
-    Flex,
-    Text,
-    FormControl,
-    FormLabel,
-    Heading,
-    Input,
-    Stack,
-    Image,
-} from '@chakra-ui/react'
 import '../styles/styleLogin.css';
 import Img1 from '../img/loginPhoto.png'
 

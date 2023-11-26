@@ -2,20 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import '../index.css';
 import { useNavigate } from 'react-router-dom';
-import {
-    Button,
-    Checkbox,
-    Flex,
-    Text,
-    FormControl,
-    FormLabel,
-    Heading,
-    Input,
-    Stack,
-    Image,
-} from '@chakra-ui/react'
 import '../styles/styleLogin.css';
-import Img1 from '../img/loginPhoto.png'
 
 const LoginEmployee = () => {
     const [values, setValues] = useState({
@@ -48,9 +35,6 @@ const LoginEmployee = () => {
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                     <input type="email" name="email" autoComplete='false' id="email" placeholder='E-mail' className='w-full border border-gray-300 rounded-md py-3 px-3 focus:outline-none focus:border-blue-500' onChange={(e) => setValues({ ...values, email: e.target.value })} value={'employes@sefp.fr'}/>
-                    </div>
-                    <div className="mb-2">
-                        <input type="password" name="password" autoComplete='false' id="password" placeholder='Mot de passe' className='w-full border border-gray-300 rounded-md py-3 px-3 focus:outline-none focus:border-blue-500' onChange={(e) => setValues({ ...values, password: e.target.value })} />
                     </div>
                     <div className="text-danger mt-2 mb-4">
                         {error && error}

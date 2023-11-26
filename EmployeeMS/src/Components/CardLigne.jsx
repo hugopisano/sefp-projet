@@ -25,9 +25,6 @@ const CardLigne = ({ title, post, value }) => {
                     <h2 className="text-black dark:text-white text-lg font-medium m-0">{title}</h2>
                 </div>
                 <div className="flex flex-col justify-between flex-grow">
-                    {/* <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-[#E2E8F0]">
-                        <div className={`bg-blue-600 h-2.5 rounded-full`} style={{ width: `20%` }}></div>
-                    </div> */}
                     <p className="leading-relaxed text-base text-black dark:text-gray-300 w-full opacity-0">
                         Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.
                     </p>

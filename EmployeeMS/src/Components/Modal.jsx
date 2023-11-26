@@ -66,7 +66,6 @@ const Modal = ({ title, post, value, openModal, closeModal }) => {
                     </div>
                 </div>
                 <form>
-                    {/* Votre formulaire ici */}
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="value">
                             Valeur
@@ -104,7 +103,6 @@ const Modal = ({ title, post, value, openModal, closeModal }) => {
                             )}
                         </ul>
                     </div>
-                    {/* Autres champs de formulaire... */}
                 </form>
                 <div className="items-start py-3">
                     <button onClick={closeModal} className="px-4 py-2 bg-indigo-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-300">

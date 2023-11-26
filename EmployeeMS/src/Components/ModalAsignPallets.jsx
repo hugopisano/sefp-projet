@@ -53,14 +53,11 @@ const ModalAsignPallets = ({ title, post, value, openModal, closeModal }) => {
         try {
             const response = await axios.post('http://localhost:3000/auth/record_pallet', data);
             if (response.data.Status) {
-                // Traitement en cas de succès, par exemple, fermer le modal
                 closeModal();
             } else {
-                // Gérer les cas où l'API renvoie un statut d'erreur
                 alert("Erreur lors de l'enregistrement des données");
             }
         } catch (error) {
-            // Gérer les erreurs de requête
             console.error("Erreur lors de l'envoi des données", error);
             alert("Erreur lors de la communication avec le serveur");
         }
@@ -74,7 +71,6 @@ const ModalAsignPallets = ({ title, post, value, openModal, closeModal }) => {
                     <h3 className="text-lg leading-6 font-medium text-gray-900 text-left mb-4">{title}</h3>
                 </div>
                 <form onSubmit={handleSubmit}>
-                    {/* Votre formulaire ici */}
                     <div className="mb-4">
                         {/* Selecteur employé */}
                         <select
@@ -171,11 +167,6 @@ const ModalAsignPallets = ({ title, post, value, openModal, closeModal }) => {
                         </button>
                     </div>
                 </form>
-                {/* <div className="items-start py-3">
-                    <button onClick={closeModal} className="px-4 py-2 bg-indigo-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-300">
-                        Ajouter
-                    </button>
-                </div> */}
             </div >
         </div >
     )
