@@ -17,10 +17,10 @@ import {
 import '../styles/styleLogin.css';
 import Img1 from '../img/loginPhoto.png'
 
-const Login = () => {
+const LoginEmployee = () => {
     const [values, setValues] = useState({
-        email: '',
-        password: '',
+        email: 'employes@sefp.fr',
+        password: '0000',
     });
     const navigate = useNavigate();
     const [error, setError] = useState(null);
@@ -31,8 +31,8 @@ const Login = () => {
         axios.post('http://localhost:3000/auth/adminlogin', values)
             .then(result => {
                 if (result.data.loginStatus) {
-                    localStorage.setItem("valid", true)
-                    navigate('/dashboard')
+                    localStorage.setItem("validEmployee", true)
+                    navigate('/tablette')
                 } else {
                     setError(result.data.Error)
                 }
@@ -42,30 +42,18 @@ const Login = () => {
 
     return (
         <div className="bg-white-100 flex justify-center items-center h-screen">
-            <div className="w-1/2 h-screen hidden lg:block">
-                <img src={Img1} alt="Placeholder Image" className="object-cover w-full h-full" />
-            </div>
             <div className="lg:py-32 lg:px-40 md:p-52 sm:20 p-12 w-full lg:w-1/2">
-                <h1 className="text-2xl font-semibold mb-3">Connectez-vous à votre compte</h1>
-                <p className='text-1xl font-normal mb-8 text-[#64748B]'>Content de vous revoir! Veuillez entrer vos informations.</p>
+                <h1 className="text-2xl font-semibold mb-3 text-center">Connectez-vous à votre compte.</h1>
+                <p className='text-1xl font-normal mb-8 text-[#64748B] text-center'>Content de vous revoir! Veuillez entrer vos informations.</p>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <input type="email" name="email" autoComplete='false' id="email" placeholder='E-mail' className='w-full border border-gray-300 rounded-md py-3 px-3 focus:outline-none focus:border-blue-500' onChange={(e) => setValues({ ...values, email: e.target.value })} />
+                    <input type="email" name="email" autoComplete='false' id="email" placeholder='E-mail' className='w-full border border-gray-300 rounded-md py-3 px-3 focus:outline-none focus:border-blue-500' onChange={(e) => setValues({ ...values, email: e.target.value })} value={'employes@sefp.fr'}/>
                     </div>
                     <div className="mb-2">
                         <input type="password" name="password" autoComplete='false' id="password" placeholder='Mot de passe' className='w-full border border-gray-300 rounded-md py-3 px-3 focus:outline-none focus:border-blue-500' onChange={(e) => setValues({ ...values, password: e.target.value })} />
                     </div>
-                    <div className="text-danger mt-2 mb-2">
+                    <div className="text-danger mt-2 mb-4">
                         {error && error}
-                    </div>
-                    <div className="d-flex flex-row justify-between mt-4">
-                        <div className="mb-4 flex items-center">
-                            <input type="checkbox" id="remember" name="remember" className="text-blue-500" />
-                            <label htmlFor="remember" className="text-gray-600 ml-2">Se souvenir de moi</label>
-                        </div>
-                        <div className="mb-6">
-                            <a href="mailto:hugopisano@outlook.fr?subject=Mot%20de%20passe%20oubli%C3%A9.%20Demande%20de%20r%C3%A9initialisation%20SEFP&body=Bonjour,%0D%0A%0D%0AJ'ai%20perdu%20mon%20mot%20de%20passe%20et%20j'ai%20besoin%20d'une%20réinitialisation.%20Merci%20de%20m'assister%20dans%20cette%20procédure.%0D%0A%0D%0ACordialement," className="hover:underline text-[#F6941C]">Mot de passe oublié?</a>
-                        </div>
                     </div>
                     <button type="submit" className="bg-[#F6941C] hover:bg-[#e79839] text-white font-semibold rounded-2xl py-3 px-4 w-full">Se connecter</button>
                 </form>
@@ -74,4 +62,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default LoginEmployee

@@ -46,7 +46,8 @@ const ModalAsignPallets = ({ title, post, value, openModal, closeModal }) => {
             length: selectedLength,
             width: selectedWidth,
             woodType: selectedWoodType,
-            additionalOptions: selectedOptions
+            additionalOptions: selectedOptions,
+            postId: post
         };
 
         try {

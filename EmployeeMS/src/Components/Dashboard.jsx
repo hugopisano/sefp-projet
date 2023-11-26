@@ -36,7 +36,7 @@ const Dashboard = () => {
                                     <i className="fs-4 bi-people"></i> <span className="ms-1 d-none d-sm-inline">Employés</span> </Link>
                             </li>
                             <li className='mb-3 w-full hover:bg-[#F8FAFC] rounded-md pl-5'>
-                                <Link to="/dashboard" className="nav-link px-0 align-middle text-black">
+                                <Link to="/dashboard/poste" className="nav-link px-0 align-middle text-black">
                                     <i className="fs-4 bi-person"></i> <span className="ms-1 d-none d-sm-inline">Poste</span></Link>
                             </li>
                             <li className='mb-3 w-full hover:bg-[#F8FAFC] rounded-md pl-5'>

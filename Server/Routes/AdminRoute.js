@@ -150,18 +150,18 @@ router.get('/employees_by_post/:postId', (req, res) => {
 
 router.post('/record_pallet', (req, res) => {
     // Remplacez ces champs par les noms réels des champs de votre formulaire
-    const { employeeId, length, width, woodType, additionalOptions } = req.body;
+    const { employeeId, length, width, woodType, additionalOptions, postId } = req.body;
 
     // Assurez-vous que les champs nécessaires sont présents
-    if (!employeeId || !length || !width || !woodType) {
+    if (!employeeId || !length || !width || !woodType || !postId) {
         return res.status(400).json({ Status: false, Error: "Missing required fields" });
     }
 
     const sql = `
-        INSERT INTO pallets (employee_id, length, width, wood_type, additional_options)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO pallets (employee_id, length, width, wood_type, additional_options, post_id)
+        VALUES (?, ?, ?, ?, ?, ?)
     `;
-    const values = [employeeId, length, width, woodType, additionalOptions];
+    const values = [employeeId, length, width, woodType, additionalOptions, postId];
 
     con.query(sql, values, (err, result) => {
         if (err) {
@@ -353,10 +353,95 @@ function queryPromise(con, query, params) {
     });
 }
 
+router.get('/pallets_data/:postId', (req, res) => {
+    const postId = req.params.postId;
 
+    const sql = `
+        SELECT p.*, e.nom, e.prenom
+        FROM pallets p
+        JOIN employee e ON p.employee_id = e.id
+        WHERE p.post_id = ?;
+    `;
 
+    con.query(sql, [postId], (err, result) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Query error" });
+        }
+        return res.json({ Status: true, Data: result });
+    });
+});
 
+router.get('/pallets_count/day/:postId', (req, res) => {
+    const postId = req.params.postId;
 
+    const sql = `SELECT COUNT(*) FROM pallets WHERE post_id = ? AND DATE(date_assigned) = CURDATE();`;
+
+    con.query(sql, [postId], (err, result) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Query error" });
+        }
+        return res.json({ Status: true, Data: result });
+    });
+});
+
+router.get('/pallets_count/week/:postId', (req, res) => {
+    const postId = req.params.postId;
+
+    const sql = `SELECT COUNT(*)
+    FROM pallets 
+    WHERE post_id = ?
+      AND date_assigned >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY 
+      AND date_assigned < CURDATE() - INTERVAL WEEKDAY(CURDATE()) - 5 DAY;`;
+
+    con.query(sql, [postId], (err, result) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Query error" });
+        }
+        return res.json({ Status: true, Data: result });
+    });
+});
+
+router.get('/pallets_count/month/:postId', (req, res) => {
+    const postId = req.params.postId;
+
+    const sql = `SELECT COUNT(*) 
+    FROM pallets 
+    WHERE post_id = ?
+      AND YEAR(date_assigned) = YEAR(CURRENT_DATE) 
+      AND MONTH(date_assigned) = MONTH(CURRENT_DATE) 
+      AND WEEKDAY(date_assigned) < 5;
+    `;
+
+    con.query(sql, [postId], (err, result) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Query error" });
+        }
+        return res.json({ Status: true, Data: result });
+    });
+});
+
+router.get('/pallets_count/year/:postId', (req, res) => {
+    const postId = req.params.postId;
+
+    const sql = `SELECT COUNT(*)
+    FROM pallets
+    WHERE post_id = ?
+      AND YEAR(date_assigned) = YEAR(CURDATE())
+      AND WEEKDAY(date_assigned) < 5;    
+    `;
+
+    con.query(sql, [postId], (err, result) => {
+        if (err) {
+            console.error("Error:", err);
+            return res.status(500).json({ Status: false, Error: "Query error" });
+        }
+        return res.json({ Status: true, Data: result });
+    });
+});
 
 
 export { router as adminRouter }
